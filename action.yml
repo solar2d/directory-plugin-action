@@ -7,7 +7,9 @@ runs:
   using: composite
   steps:
     - uses: actions/checkout@v2
+      if: format('refs/heads/{0}', github.event.repository.default_branch) == github.ref
     - name: prepare
+      if: format('refs/heads/{0}', github.event.repository.default_branch) == github.ref
       shell: bash
       run: |
         cd plugins
@@ -28,6 +30,7 @@ runs:
         )
         done
     - name: Release
+      if: format('refs/heads/{0}', github.event.repository.default_branch) == github.ref
       uses: softprops/action-gh-release@v1
       with:
         files: plugins/*.tgz
@@ -36,6 +39,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
     - name: Directory update request
+      if: format('refs/heads/{0}', github.event.repository.default_branch) == github.ref
       shell: bash
       run: |
         [ -z "${{ inputs.pat }}" ] && echo "Skipping, no ISSUE_PAT" && exit 0
